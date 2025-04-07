@@ -57,3 +57,5 @@ db.sqlite
 
 # Random Files
 scratch/
+
+out/

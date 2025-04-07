@@ -6,10 +6,9 @@ from emp_agents.providers import OpenAIProvider, OpenAIModelType
 from tweepy import Tweet
 from tweepy.client import Client
 
-from emp_hooks import scheduler
+from emp_hooks import scheduler, log
 from emp_hooks.handlers import twitter
 from emp_hooks import manager
-from .logger import log
 from .prompts import MAIN_PROMPT
 
 agent = AgentBase(

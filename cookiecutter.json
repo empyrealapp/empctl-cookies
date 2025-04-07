@@ -2,7 +2,8 @@
     "project_name": "My Project",
     "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_') }}",
     "project_type": [
-      "python_ai_agent"
+      "python_ai_agent",
+      "twitter_agent"
     ]
   }
   

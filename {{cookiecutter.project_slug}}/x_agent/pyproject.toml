@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "{{ cookiecutter.project_slug }}"
+version = "0.1.0"
+description = ""
+authors = ["INSERT_NAME <INSERT_EMAIL>"]
+packages = [
+    { include = "{{ cookiecutter.project_slug }}" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+emp-agents = "^0.3.1"
+emp-hooks = "^0.0.9"
+tweepy = "^4.15.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.9.1"
+ruff = "^0.0.291"
+pytest = "^7.4.2"
+pytest-cov = "^4.1.0"
+
+[tool.ruff]
+select = ["E", "F", "I"]
+line-length = 100
+
+[tool.black]
+line-length = 100
+
+[tool.poetry.scripts]
+{{ cookiecutter.project_slug }} = "{{ cookiecutter.project_slug }}.main:main"
+migrate = "migrate.sh"
+
+[tool.mypy]
+python_version = "3.12"
+disallow_untyped_defs = true
+check_untyped_defs = true
+warn_return_any = true
+warn_unused_configs = true
+mypy_path = "{{ cookiecutter.project_slug }}"

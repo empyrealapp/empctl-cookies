@@ -35,5 +35,5 @@ ENV DEPLOYMENT_FILESYSTEM_PATH=.
 # Run migrations
 RUN poetry run alembic upgrade head
 
-# Set the default command
+# Run the agent
 CMD ["poetry", "run", "{{ cookiecutter.project_slug }}"]

@@ -11,8 +11,7 @@ packages = [
 python = "^3.12"
 emp-agents = "^0.3.1"
 emp-hooks = "^0.0.9"
-sqlalchemy = "^2.0.0"
-alembic = "^1.12.0"
+tweepy = "^4.15.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.9.1"
@@ -29,8 +28,6 @@ line-length = 100
 
 [tool.poetry.scripts]
 {{ cookiecutter.project_slug }} = "{{ cookiecutter.project_slug }}.main:main"
-migrate = "{{ cookiecutter.project_slug }}.migrate:run_migrations"
-revision = "{{ cookiecutter.project_slug }}.migrate:create_revision"
 
 [tool.mypy]
 python_version = "3.12"

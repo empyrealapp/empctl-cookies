@@ -28,8 +28,12 @@ jobs:
           brew tap empyrealapp/homebrew-empyrealsdk
           brew install empctl
 
+      - name: Init empctl
+        run: |
+          empctl service init --service {{ cookiecutter.service_name }}
+
       - name: Build and Deploy
         run: |
-          empctl build --tag ${{ "${{" }} github.sha }} --push --deploy --service {{ cookiecutter.project_slug }}
+          empctl build --tag {{ "${{" }} github.sha }} --push --deploy --service {{ cookiecutter.service_name }}
         env:
-          EMPCTL_API_TOKEN: ${{ "${{" }} secrets.EMPCTL_API_TOKEN }}
+          EMPCTL_API_TOKEN: {{ "${{" }} secrets.EMPCTL_API_TOKEN }}

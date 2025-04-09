@@ -13,5 +13,7 @@ class User(DBModel):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     username: Mapped[str] = mapped_column(nullable=True)
+    first_name: Mapped[str] = mapped_column(nullable=True)
+    last_name: Mapped[str] = mapped_column(nullable=True)
 
     messages: Mapped[list["Message"]] = relationship("Message", back_populates="user")

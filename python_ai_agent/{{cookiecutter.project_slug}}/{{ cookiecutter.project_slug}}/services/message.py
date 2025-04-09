@@ -1,26 +1,31 @@
-from datetime import datetime, timezone
-
-from sqlalchemy import select
-
 from emp_hooks.orm import DBService
+from sqlalchemy import select
+from telegram import Message as TelegramMessage
 
-from {{ cookiecutter.project_slug }}.models import Message
+from {{ cookiecutter.project_slug }}.models import Chat, Message, User
 
 
 class MessageService(DBService[Message]):
     def get_latest_message(
-        self, user_id: list[int] | int, limit: int = 10,
+        self, chat_id: int, user_id: int | None = None, limit: int = 10
     ) -> list[Message]:
-        if isinstance(user_id, int):
-            user_id = [user_id]
-        stmt = select(Message).where(Message.user_id.in_(user_id))
+        stmt = select(Message).where(Message.chat_id == chat_id)
+        if user_id:
+            stmt = stmt.where(Message.user_id == user_id)
+
         stmt = stmt.order_by(Message.timestamp.desc()).limit(limit)
-        # reverse the list to get the earliest messages first
         return list(self.session.scalars(stmt))[::-1]
-    
-    def add_message(self, content: str, user_id: int):
-        now = datetime.now(timezone.utc)
-        message = Message(content=content, user_id=user_id, timestamp=now)
-        self.session.add(message)
-        self.session.commit()
-        return message
+
+    def add_message(
+        self,
+        chat: Chat,
+        user: User,
+        message: TelegramMessage,
+    ):
+        return self.get_or_create(
+            chat_id=chat.id,
+            message_id=message.message_id,
+            text=message.text,
+            user_id=user.id,
+            timestamp=message.date,
+        )

@@ -2,6 +2,19 @@
 
 Description: Python AI agent
 
+### Environment Variables
+
+In order to run this application, you will need to set a few environment variables.  You can set them in your `.env` file, or export them into your shell.
+
+These will allow your agent to post on telegram, communicate with openai and use alchemy to look up onchain data.
+
+```bash
+export TELEGRAM_BOT_TOKEN=
+export OPENAI_API_KEY=
+export ALCHEMY_API_KEY=
+```
+
+
 ### Quickstart 
 
 This will migrate your sqlite models, install dependencies, and run the agent.

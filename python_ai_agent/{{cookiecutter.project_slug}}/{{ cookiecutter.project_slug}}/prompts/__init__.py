@@ -4,7 +4,7 @@ def load_prompt(name: str) -> str:
     return Path(__file__).parent.joinpath(f"{name}.md").read_text()
 
 
-MAIN_PROMPT = load_prompt("main")
+GROUP_CHAT_PROMPT = load_prompt("group")
+PRIVATE_CHAT_PROMPT = load_prompt("private")
 
-
-__all__ = ["MAIN_PROMPT"]
+__all__ = ["GROUP_CHAT_PROMPT", "PRIVATE_CHAT_PROMPT"]

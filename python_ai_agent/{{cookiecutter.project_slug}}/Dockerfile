@@ -22,7 +22,7 @@ WORKDIR /app
 
 COPY _alembic/ {{ cookiecutter.project_slug }}/ alembic.ini pyproject.toml poetry.lock /app
 
-RUN poetry install --no-ansi --only=main
+RUN poetry install --no-ansi --only=main --no-root
 
 COPY run.sh /app/run.sh
 RUN chmod +x /app/run.sh

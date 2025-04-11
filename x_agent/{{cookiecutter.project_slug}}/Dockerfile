@@ -22,7 +22,7 @@ WORKDIR /app
 
 COPY {{ cookiecutter.project_slug }}/ pyproject.toml poetry.lock /app
 
-RUN poetry install --no-ansi --only=main
+RUN poetry install --no-ansi --only=main --no-root
 
 COPY run.sh /app/run.sh
 RUN chmod +x /app/run.sh

@@ -24,13 +24,17 @@ async def on_simmi_tweet(tweet: Tweet) -> bool:
     log.info(f"Received tweet: {tweet.id} - {tweet.text}")
     tweet_id = tweet.id
 
-    client = Client(
-        bearer_token=os.environ["TWITTER_BEARER_TOKEN"],
-        consumer_key=os.environ["TWITTER_CONSUMER_KEY"],
-        consumer_secret=os.environ["TWITTER_CONSUMER_SECRET"],
-        access_token=os.environ["TWITTER_ACCESS_TOKEN"],
-        access_token_secret=os.environ["TWITTER_ACCESS_TOKEN_SECRET"],
-    )
+    # If you have the consumer key set, assume you have the full set of keys
+    if os.environ.get("TWITTER_CONSUMER_KEY"):
+        client = Client(
+            bearer_token=os.environ["TWITTER_BEARER_TOKEN"],
+            consumer_key=os.environ["TWITTER_CONSUMER_KEY"],
+            consumer_secret=os.environ["TWITTER_CONSUMER_SECRET"],
+            access_token=os.environ["TWITTER_ACCESS_TOKEN"],
+            access_token_secret=os.environ["TWITTER_ACCESS_TOKEN_SECRET"],
+        )
+    else:
+        client = Client(bearer_token=os.environ["TWITTER_BEARER_TOKEN"])
 
     response = await agent.answer(tweet.text)
 

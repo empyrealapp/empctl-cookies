@@ -17,10 +17,18 @@ export ALCHEMY_API_KEY=
 
 ### Quickstart 
 
-This will migrate your sqlite models, install dependencies, and run the agent.
+This will migrate your sqlite models, install dependencies, and initialize your empctl service.  It will not run the agent.
 
 ```bash
 chmod +x quickstart.sh && ./quickstart.sh
+```
+
+### Run the agent
+
+You can run the agent locally, once all your environment variables are set using the following command:
+
+```bash
+poetry run {{ cookiecutter.project_slug }}
 ```
 
 ### Environment
@@ -48,7 +56,7 @@ alembic upgrade head
 ### Run the example
 ```bash
 # include the DEPLOYMENT_FILESYSTEM_PATH to avoid using the default
-DEPLOYMENT_FILESYSTEM_PATH=. poetry run agent
+ALCHEMY_API_KEY=... OPENAI_API_KEY=... DEPLOYMENT_FILESYSTEM_PATH=. poetry run {{ cookiecutter.project_slug }}
 ```
 
 # NOTE: to run locally, you need to set the DEPLOYMENT_FILESYSTEM_PATH to a temporary directory.

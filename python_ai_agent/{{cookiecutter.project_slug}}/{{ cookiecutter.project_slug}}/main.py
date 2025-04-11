@@ -1,4 +1,8 @@
-from emp_agents import AgentBase, AssistantMessage, UserMessage
+from typing import Annotated
+from typing_extensions import Doc
+
+from pydantic import BaseModel
+from emp_agents import AgentBase
 from emp_agents.providers import OpenAIProvider, OpenAIModelType
 from emp_hooks.handlers.telegram import Update, ContextTypes, filters, on_message
 from emp_hooks import hooks
@@ -9,8 +13,13 @@ from {{ cookiecutter.project_slug }}.services import chat_service, message_servi
 from {{ cookiecutter.project_slug }}.tools import TOOLS
 
 
+class ResponseFormat(BaseModel):
+    content: Annotated[str | None, Doc(description="The response to the user's message, or None if the user should not respond")]
+    should_respond: Annotated[bool, Doc(description="Whether the agent should respond to the user's message")]
+
+
 @on_message(filter=filters.TEXT & ~filters.COMMAND)
-async def on_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def handle_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Main entry point for {{ cookiecutter.project_name }}"""
     bot_user = user_service.load_bot(context)
 
@@ -36,12 +45,13 @@ async def on_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "\n".join(
             f"{message.user.username}: {message.text}"
             for message in message_service.get_latest_message(chat.id)
-        )
+        ),
+        response_format=ResponseFormat,
     )
 
     # if agent has something to say, send it
-    if response != "NO RESPONSE":
-        response_msg = await update.message.reply_text(response)
+    if response.should_respond:
+        response_msg = await update.message.reply_text(response.content)
         message_service.add_message(chat, bot_user, response_msg)
 
 

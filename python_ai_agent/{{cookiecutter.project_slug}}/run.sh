@@ -1,5 +1,10 @@
 #!/bin/bash
 
+echo "Make directory if not exists"
+if [ ! -d "$DEPLOYMENT_FILESYSTEM_PATH" ]; then
+    mkdir -p $DEPLOYMENT_FILESYSTEM_PATH
+fi
+
 echo "Creating DB File"
 touch $DEPLOYMENT_FILESYSTEM_PATH/db.sqlite
 

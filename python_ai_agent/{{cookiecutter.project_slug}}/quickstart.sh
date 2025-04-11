@@ -8,6 +8,5 @@ alembic upgrade head
 poetry install
 poetry lock
 
-# Run the agent
-echo "Starting {{ cookiecutter.project_name }}"
-poetry run {{ cookiecutter.project_slug }}
+# setup empctl
+empctl services init --name {{ cookiecutter.service_name }}

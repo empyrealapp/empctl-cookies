@@ -20,9 +20,12 @@ RUN curl -sSL https://install.python-poetry.org | python3 -
 
 WORKDIR /app
 
-COPY _alembic/ {{ cookiecutter.project_slug }}/ alembic.ini pyproject.toml poetry.lock* /app
 
-RUN poetry install --no-ansi --only=main --no-root
+COPY _alembic/ /app/_alembic/
+COPY {{ cookiecutter.project_slug }}/ /app/{{ cookiecutter.project_slug }}/
+COPY alembic.ini pyproject.toml poetry.lock* /app/
+
+RUN poetry install --no-ansi --only=main
 
 COPY run.sh /app/run.sh
 RUN chmod +x /app/run.sh

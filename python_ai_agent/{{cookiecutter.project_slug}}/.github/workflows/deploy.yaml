@@ -29,6 +29,10 @@ jobs:
           brew tap empyrealapp/homebrew-empyrealsdk
           brew install empctl
 
+      - name: Init service
+        run: |
+          empctl service init --name {{ cookiecutter.service_name }} --ignore-exists
+
       - name: Build and Deploy
         run: |
           {% raw -%}

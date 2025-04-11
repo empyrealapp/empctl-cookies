@@ -31,7 +31,7 @@ line-length = 100
 [tool.poetry.scripts]
 {{ cookiecutter.project_slug }} = "{{ cookiecutter.project_slug }}.main:main"
 migrate = "{{ cookiecutter.project_slug }}.migrate:run_migrations"
-revision = "{{ cookiecutter.project_slug }}.migrate:create_revision"
+revision = "{{ cookiecutter.project_slug }}.revision:create_revision"
 
 [tool.mypy]
 python_version = "3.12"

@@ -1,4 +1,4 @@
-from emp_agents import AgentBase, AssistantMessage, UserMessage
+from emp_agents import AgentBase
 from emp_agents.providers import OpenAIProvider, OpenAIModelType
 from emp_hooks.handlers.telegram import Update, ContextTypes, filters, on_message
 from emp_hooks import hooks
@@ -10,7 +10,7 @@ from {{ cookiecutter.project_slug }}.tools import TOOLS
 
 
 @on_message(filter=filters.TEXT & ~filters.COMMAND)
-async def on_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def handle_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Main entry point for {{ cookiecutter.project_name }}"""
     bot_user = user_service.load_bot(context)
 

@@ -14,8 +14,8 @@ from {{ cookiecutter.project_slug }}.tools import TOOLS
 
 
 class ResponseFormat(BaseModel):
-    content: Annotated[str | None, Doc(description="The response to the user's message, or None if the user should not respond")]
-    should_respond: Annotated[bool, Doc(description="Whether the agent should respond to the user's message")]
+    content: Annotated[str | None, Doc("The response to the user's message, or None if the user should not respond")]
+    should_respond: Annotated[bool, Doc("Whether the agent should respond to the user's message")]
 
 
 @on_message(filter=filters.TEXT & ~filters.COMMAND)

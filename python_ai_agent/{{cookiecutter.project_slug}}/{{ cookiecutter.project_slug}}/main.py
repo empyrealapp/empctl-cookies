@@ -50,12 +50,12 @@ async def handle_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE
     )
 
     # if agent has something to say, send it
-    if response.should_respond:
+    if response.should_respond and response.content:
         response_msg = await update.message.reply_text(response.content)
         message_service.add_message(chat, bot_user, response_msg)
 
 
-def main():
+def main() -> None:
     hooks.run_forever()
 
 

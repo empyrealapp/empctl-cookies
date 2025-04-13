@@ -6,12 +6,10 @@ from emp_agents import AgentBase
 from emp_agents.providers import OpenAIProvider, OpenAIModelType
 from emp_hooks.handlers.telegram import Update, ContextTypes, filters, on_message
 from emp_hooks import hooks
-from emp_hooks.utils.telegram import is_group_chat
 
-from {{ cookiecutter.project_slug }}.prompts import GROUP_CHAT_PROMPT, PRIVATE_CHAT_PROMPT
-from {{ cookiecutter.project_slug }}.services import chat_service, message_service, user_service
+from {{ cookiecutter.project_slug }}.prompts import prompts
+from {{ cookiecutter.project_slug }}.services import chat_service, message_service, user_service, session
 from {{ cookiecutter.project_slug }}.tools import TOOLS
-
 
 class ResponseFormat(BaseModel):
     content: Annotated[str | None, Doc("The response to the user's message, or None if the user should not respond")]
@@ -26,7 +24,7 @@ async def handle_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE
     if not (update.message and update.message.from_user):
         return
 
-    prompt = GROUP_CHAT_PROMPT if is_group_chat(update) else PRIVATE_CHAT_PROMPT
+    prompt = prompts.load(update, context)
     agent = AgentBase(
         prompt=prompt,
         provider=OpenAIProvider(
@@ -56,7 +54,10 @@ async def handle_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 
 def main() -> None:
-    hooks.run_forever()
+    try:
+        hooks.run_forever()
+    finally:
+        session.close()
 
 
 if __name__ == "__main__":

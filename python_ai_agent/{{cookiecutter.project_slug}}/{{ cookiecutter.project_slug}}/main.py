@@ -14,8 +14,8 @@ from {{ cookiecutter.project_slug }}.tools import TOOLS
 
 
 class ResponseFormat(BaseModel):
-    content: Annotated[str | None, Doc(description="The response to the user's message, or None if the user should not respond")]
-    should_respond: Annotated[bool, Doc(description="Whether the agent should respond to the user's message")]
+    content: Annotated[str | None, Doc("The response to the user's message, or None if the user should not respond")]
+    should_respond: Annotated[bool, Doc("Whether the agent should respond to the user's message")]
 
 
 @on_message(filter=filters.TEXT & ~filters.COMMAND)
@@ -50,12 +50,12 @@ async def handle_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE
     )
 
     # if agent has something to say, send it
-    if response.should_respond:
+    if response.should_respond and response.content:
         response_msg = await update.message.reply_text(response.content)
         message_service.add_message(chat, bot_user, response_msg)
 
 
-def main():
+def main() -> None:
     hooks.run_forever()
 
 

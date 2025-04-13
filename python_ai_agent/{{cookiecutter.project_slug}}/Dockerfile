@@ -25,6 +25,7 @@ COPY _alembic/ /app/_alembic/
 COPY {{ cookiecutter.project_slug }}/ /app/{{ cookiecutter.project_slug }}/
 COPY alembic.ini pyproject.toml poetry.lock* /app/
 
+RUN poetry lock
 RUN poetry install --no-ansi --only=main
 
 COPY run.sh /app/run.sh

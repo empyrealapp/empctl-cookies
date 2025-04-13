@@ -1,15 +1,42 @@
-import os
 from pathlib import Path
 
+from pydantic import BaseModel, PrivateAttr
+from telegram import Update
+from telegram.ext import ContextTypes
 
-def load_prompt(name: str) -> str:
+from emp_hooks.utils.telegram import is_group_chat
+
+
+def load_prompt(name: str, username: str) -> str:
     text = Path(__file__).parent.joinpath(f"{name}.md").read_text()
-    bot_username = os.getenv("TG_BOT_USERNAME", "@empcloud_demo_bot")
 
-    return text.replace("<TG_BOT_USERNAME>", f"@{bot_username}")
+    return text.replace("<TG_BOT_USERNAME>", f"@{username.lstrip("@")}")
 
 
-GROUP_CHAT_PROMPT = load_prompt("group")
-PRIVATE_CHAT_PROMPT = load_prompt("private")
+class TelegramPromptManager(BaseModel):
+    _bot_username: str = PrivateAttr()
+    _group_chat_prompt: str | None = PrivateAttr(default=None)
+    _private_chat_prompt: str | None = PrivateAttr(default=None)
 
-__all__ = ["GROUP_CHAT_PROMPT", "PRIVATE_CHAT_PROMPT"]
+    @property
+    def group_chat_prompt(self) -> str:
+        if self._group_chat_prompt is None:
+            self._group_chat_prompt = load_prompt("group", self._bot_username)
+        return self._group_chat_prompt
+
+    @property
+    def private_chat_prompt(self) -> str:
+        if self._private_chat_prompt is None:
+            self._private_chat_prompt = load_prompt("private", self._bot_username)
+        return self._private_chat_prompt
+
+    def load(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+        self._bot_username = context.bot.username
+        if is_group_chat(update):
+            return self.group_chat_prompt
+        return self.private_chat_prompt
+
+
+prompts = TelegramPromptManager()
+
+__all__ = ["prompts"]

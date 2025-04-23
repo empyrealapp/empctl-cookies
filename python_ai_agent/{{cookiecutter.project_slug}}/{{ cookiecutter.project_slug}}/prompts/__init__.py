@@ -14,7 +14,7 @@ def load_prompt(name: str, username: str) -> str:
 
 
 class TelegramPromptManager(BaseModel):
-    _bot_username: str = PrivateAttr()
+    _bot_username: str = PrivateAttr(default="assistant")
     _group_chat_prompt: str | None = PrivateAttr(default=None)
     _private_chat_prompt: str | None = PrivateAttr(default=None)
 
@@ -35,6 +35,9 @@ class TelegramPromptManager(BaseModel):
         if is_group_chat(update):
             return self.group_chat_prompt
         return self.private_chat_prompt
+
+    def set_bot_username(self, bot_username: str) -> None:
+        self._bot_username = bot_username
 
 
 prompts = TelegramPromptManager()

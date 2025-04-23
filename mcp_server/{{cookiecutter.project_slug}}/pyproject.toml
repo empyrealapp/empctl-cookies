@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "{{ cookiecutter.project_slug }}"
+name = "{{ cookiecutter.project_name }}"
 version = "0.1.0"
 description = ""
 authors = ["INSERT_NAME <INSERT_EMAIL>"]
@@ -14,6 +14,9 @@ emp-hooks = "^0.0.10"
 pydantic = "^2.11.0"
 sqlalchemy = "^2.0.0"
 alembic = "^1.12.0"
+fastapi = "^0.115.12"
+mcp = {extras = ["cli"], version = "^1.6.0"}
+uvicorn = "^0.34.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.9.1"
@@ -28,16 +31,10 @@ line-length = 100
 [tool.black]
 line-length = 100
 
-[tool.poetry.scripts]
-{{ cookiecutter.project_slug }} = "{{ cookiecutter.project_slug }}.main:main"
-migrate = "{{ cookiecutter.project_slug }}.migrate:run_migrations"
-revision = "{{ cookiecutter.project_slug }}.revision:create_revision"
-run-local = "{{ cookiecutter.project_slug }}.run_local:run_local"
-
 [tool.mypy]
 python_version = "3.12"
 disallow_untyped_defs = true
 check_untyped_defs = true
 warn_return_any = true
 warn_unused_configs = true
-mypy_path = "{{ cookiecutter.project_slug }}"
+mypy_path = "demo"

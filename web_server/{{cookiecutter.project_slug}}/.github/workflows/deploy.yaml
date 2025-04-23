@@ -1,0 +1,49 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Tap homebrew-empyrealsdk
+        run: |
+          brew tap empyrealapp/homebrew-empyrealsdk
+          brew install empctl
+
+      - name: Init service
+        run: |
+          empctl services init --name {{ cookiecutter.service_name }} --ignore-exists
+        env:
+          EMPCTL_API_TOKEN: ${{ secrets.EMPCTL_API_TOKEN }}
+ 
+      - name: Expose Port
+        run: |
+          empctl services update --ingress-port 8000 --name {{ cookiecutter.service_name }}
+        env:
+          EMPCTL_API_TOKEN: ${{ secrets.EMPCTL_API_TOKEN }}
+
+      - name: Build and Deploy
+        run: |
+          empctl build --tag ${{ github.sha }} \
+          --push \
+          --deploy \
+          --service demo
+        env:
+          EMPCTL_API_TOKEN: ${{ secrets.EMPCTL_API_TOKEN }}
